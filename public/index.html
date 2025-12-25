@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python + PHP Hosting on Vercel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        nav {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 500;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 100px 0;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 80px 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .deployment-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            margin: 50px auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .deploy-button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .tab {
+            padding: 10px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin: 0 5px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .result {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="logo">🚀 PyPHP Hosting</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#deploy">Deploy</a>
+                <a href="#pricing">Pricing</a>
+                <a href="/api/python/websites" target="_blank">API</a>
+            </div>
+        </nav>
+        
+        <section class="hero">
+            <h1>Python + PHP Hosting on Vercel</h1>
+            <p>Deploy your Python and PHP applications instantly with our Vercel-powered hosting platform. Free tier available!</p>
+            <a href="#deploy" class="cta-button">Start Deploying →</a>
+        </section>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('python')">🐍 Python Hosting</button>
+            <button class="tab" onclick="switchTab('php')">🐘 PHP Hosting</button>
+        </div>
+        
+        <section id="deploy" class="deployment-form">
+            <!-- Python Form -->
+            <div id="python-form" class="tab-content active">
+                <h2>Deploy Python App</h2>
+                <form id="pythonDeployForm">
+                    <div class="form-group">
+                        <label>App Name</label>
+                        <input type="text" id="pythonAppName" placeholder="my-python-app" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Python Version</label>
+                        <select id="pythonVersion">
+                            <option value="3.9">Python 3.9</option>
+                            <option value="3.10">Python 3.10</option>
+                            <option value="3.11">Python 3.11</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Framework</label>
+                        <select id="pythonFramework">
+                            <option value="flask">Flask</option>
+                            <option value="django">Django</option>
+                            <option value="fastapi">FastAPI</option>
+                            <option value="static">Static Site</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>GitHub Repo URL (Optional)</label>
+                        <input type="url" id="pythonRepo" placeholder="https://github.com/username/repo">
+                    </div>
+                    
+                    <button type="submit" class="deploy-button">🚀 Deploy Python App</button>
+                </form>
+            </div>
+            
+            <!-- PHP Form -->
+            <div id="php-form" class="tab-content">
+                <h2>Deploy PHP App</h2>
+                <form id="phpDeployForm">
+                    <div class="form-group">
+                        <label>App Name</label>
+                        <input type="text" id="phpAppName" placeholder="my-php-app" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>PHP Version</label>
+                        <select id="phpVersion">
+                            <option value="8.2">PHP 8.2</option>
+                            <option value="8.1">PHP 8.1</option>
+                            <option value="8.0">PHP 8.0</option>
+                            <option value="7.4">PHP 7.4</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Framework</label>
+                        <select id="phpFramework">
+                            <option value="vanilla">Vanilla PHP</option>
+                            <option value="laravel">Laravel</option>
+                            <option value="wordpress">WordPress</option>
+                            <option value="codeigniter">CodeIgniter</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>GitHub Repo URL (Optional)</label>
+                        <input type="url" id="phpRepo" placeholder="https://github.com/username/repo">
+                    </div>
+                    
+                    <button type="submit" class="deploy-button">🚀 Deploy PHP App</button>
+                </form>
+            </div>
+            
+            <div id="deploymentResult" class="result"></div>
+        </section>
+        
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Lightning Fast</h3>
+                <p>Deployed on Vercel's global edge network for instant loading times.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>Python + PHP</h3>
+                <p>Support for both Python and PHP applications with automatic scaling.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Free Tier</h3>
+                <p>Generous free tier with 100GB bandwidth and automatic HTTPS.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function switchTab(language) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update forms
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(language + '-form').classList.add('active');
+        }
+
+        // Python deployment
+        document.getElementById('pythonDeployForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('pythonAppName').value,
+                version: document.getElementById('pythonVersion').value,
+                framework: document.getElementById('pythonFramework').value,
+                repo_url: document.getElementById('pythonRepo').value
+            };
+            
+            const resultDiv = document.getElementById('deploymentResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<p>Deploying Python app... ⏳</p>';
+            
+            try {
+                const response = await fetch('/api/python/deploy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <h3>✅ Deployment Successful!</h3>
+                    <p><strong>App Name:</strong> ${data.message}</p>
+                    <p><strong>URL:</strong> <a href="${data.url}" target="_blank">${data.url}</a></p>
+                    <p><strong>Python Version:</strong> ${data.version}</p>
+                    <p><strong>Deployment ID:</strong> ${data.deployment_id}</p>
+                    <button onclick="window.open('${data.url}', '_blank')">Visit Site</button>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        });
+
+        // PHP deployment
+        document.getElementById('phpDeployForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('phpAppName').value,
+                php_version: document.getElementById('phpVersion').value,
+                framework: document.getElementById('phpFramework').value,
+                repo_url: document.getElementById('phpRepo').value
+            };
+            
+            const resultDiv = document.getElementById('deploymentResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<p>Deploying PHP app... ⏳</p>';
+            
+            try {
+                const response = await fetch('/api/php/deploy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <h3>✅ Deployment Successful!</h3>
+                    <p><strong>App Name:</strong> ${data.name}</p>
+                    <p><strong>URL:</strong> <a href="${data.url}" target="_blank">${data.url}</a></p>
+                    <p><strong>PHP Version:</strong> ${data.php_version}</p>
+                    <p><strong>Deployment ID:</strong> ${data.deployment_id}</p>
+                    <button onclick="window.open('${data.url}', '_blank')">Visit Site</button>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        });
+
+        // Test API connection
+        async function testAPI() {
+            try {
+                const pythonRes = await fetch('/api/python/deploy');
+                const phpRes = await fetch('/api/php/deploy');
+                
+                console.log('Python API:', await pythonRes.json());
+                console.log('PHP API:', await phpRes.json());
+                
+                console.log('✅ APIs are working!');
+            } catch (error) {
+                console.error('❌ API Error:', error);
+            }
+        }
+        
+        // Run API test on load
+        window.onload = testAPI;
+    </script>
+</body>
+</html>
